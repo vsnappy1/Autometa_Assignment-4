@@ -35,7 +35,7 @@ namespace ToCS_Assignment_4
         public static void PrintString(string[] array, int Length,string str)   //This prints the Combination of strings
         {
             string leter = " ";                         //Here str is a Binary Counter which gets the binary word of required length...
-                                                            //e.g if length is 4 and count is 2, it will have 0011
+            if (Length == 0) { Console.Write("^"); }      //e.g if length is 4 and count is 2, it will have 0011
             for(int j = 0; j < Length; j++)             //This loop makes required string combination out of binary word
             {
                 if (str[j] == '0')                      //If first Character of string is 0, than leter contains first element of Alphabet
@@ -46,43 +46,49 @@ namespace ToCS_Assignment_4
             }
             Console.WriteLine();                        //This brings the courser to next line
         }
-
+        public static string completeBinaryCount(int number, int Length)        //This returns the binary word of a number of given length 
+        {
+            string BinaryCount = Convert.ToString(number, 2);            //This converts the integer into base 2/Binary
+            if (BinaryCount.Length < Length)
+            {
+                for (int j = BinaryCount.Length; j < Length; j++)   //This add the remaining 0s at the begining of BinaryCount
+                    BinaryCount = "0" + BinaryCount;
+            }
+            return BinaryCount;
+        }
+        public static void printAllString(int Length,string[]array)
+        {
+            for (int i = 0; i < Power(2, Length); i++)        //This loop completes the BinaryCount... 
+            {                                                       //(e.g if length is 4, for 2 it is 11 but we need 0011
+                PrintString(array, Length, completeBinaryCount(i, Length));        //This prints the string one by one
+            }
+        }
         static void Main(string[] args)
         {
-            int Length;
-            Console.Write("Enter Valid Alphabet = { ");
-            string Alphabet = Console.ReadLine();               //Input Alphabet
-            Console.Write("Enter Length of String = ");
-            string Len = Console.ReadLine();                    //Input of string
-            if (Len == "A")                                    
-                Length = 4;
-            else
-                Length = int.Parse(Len);                        //If input is not A then string is converted into its equivalent integer
+             int Length=0;
+             Console.Write("Enter Valid Alphabet = { ");
+             string Alphabet = Console.ReadLine();               //Input Alphabet
+             Console.Write("Enter Length of String = ");
+             string Len = Console.ReadLine();                    //Input of string
             
-            int size = NumberOfElementsIn(Alphabet);            //This gets the number of elements in Alphabet
-            string[] array = new string[size];                  //array of required size is initialized
-            array = ElementsOfAlphabet(Alphabet, array);        //Now array conatains elements of Alphabet
-            
-            int Number_Of_Strings = Power(size, Length);        //Number of strings to be made by program 
-            string BinaryCount;                                 //BinaryCount is a Binary counter of given length
+             
+             int size = NumberOfElementsIn(Alphabet);            //This gets the number of elements in Alphabet
+             string[] array = new string[size];                  //array of required size is initialized
+             array = ElementsOfAlphabet(Alphabet, array);        //Now array conatains elements of Alphabet
+             int Number_Of_Strings = Power(size, Length);        //Number of strings to be made by program 
 
-            if(Len=="A")
-                Console.WriteLine(" ^");
-            for (int i = 0; i < Power(size,Length); i++)        //This loop completes the BinaryCount... 
-            {                                                       //(e.g if length is 4, for 2 it is 11 but we need 0011
-                BinaryCount = Convert.ToString(i,2);            //This converts the integer into base 2/Binary
-                if (BinaryCount.Length < Length)
-                {
-                    for (int j = BinaryCount.Length; j < Length; j++)   //This add the remaining 0s at the begining of BinaryCount
-                        BinaryCount = "0" + BinaryCount;
-                }
-                PrintString(array, Length, BinaryCount);        //This prints the string one by one
-            }
-            if (Len == "A")                                     //This prints the dots to show that there are infinity more combnations
-                for(int i=0;i<5;i++)
+            if (Len == "A")
+            {
+                for (int i = 0; i <= 4; i++)
+                    printAllString(i, array);
+                for (int i = 0; i < 5; i++)
                     Console.WriteLine("  .  ");
-            if(Length==0)                                       //This prints Null Symbol if length is zero
-                Console.WriteLine("^");
+            }
+            else
+            {
+                Length = int.Parse(Len);                        //If input is not A then string is converted into its equivalent integer
+                printAllString(Length, array);
+            }
             Console.ReadKey();
         }
     }
